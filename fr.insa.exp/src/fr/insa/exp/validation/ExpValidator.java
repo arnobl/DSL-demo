@@ -6,8 +6,11 @@ package fr.insa.exp.validation;
 import org.eclipse.xtext.validation.Check;
 
 import fr.insa.exp.exp.Div;
+import fr.insa.exp.exp.ExpArithm;
 import fr.insa.exp.exp.ExpPackage;
 import fr.insa.exp.exp.Literal;
+import fr.insa.exp.exp.Val;
+import fr.insa.exp.exp.ValRef;
 
 /**
  * This class contains custom validation rules. 
@@ -19,14 +22,26 @@ public class ExpValidator extends AbstractExpValidator {
 	public static final String DIV_0 = "0-div";
 	public static final String DIV_0_MSG = "Cannot divide by 0";
 	
-	public static final String INV_REF = "invalid-ref";
-	public static final String INV_REF_MSG = "This value does not exist";
-			
+	public static final String VAL_DUP = "val-dup";
+	public static final String VAL_DUP_MSG = "Already defined";
+	
 	@Check
 	public void checkDiv0(Div division) {
-		if (division.getRightOp() instanceof Literal && Double.compare(0d, ((Literal) division.getLeftOp()).getValue()) == 0) {
-			error(DIV_0_MSG, ExpPackage.Literals.OPERANDS__LEFT_OP, DIV_0);
+		if (division.getRightOp() instanceof Literal && Double.compare(0d, ((Literal) division.getRightOp()).getValue()) == 0) {
+			error(DIV_0_MSG, ExpPackage.Literals.OPERANDS__RIGHT_OP, DIV_0);
+		}
+		
+		if (division.getRightOp() instanceof ValRef && Double.compare(0d, ((ValRef) division.getRightOp()).getRef().getValue()) == 0) {
+			error(DIV_0_MSG, ExpPackage.Literals.OPERANDS__RIGHT_OP, DIV_0);
 		}
 	}
 	
+	@Check
+	public void checkNoDuplicateVal(Val val) {
+		if(((ExpArithm) val.eContainer()).getVars()
+			.stream()
+			.anyMatch(v -> v.getName().equals(val.getName()) && v != val)) {
+			error(VAL_DUP_MSG, ExpPackage.Literals.VAL__NAME, VAL_DUP);
+		}
+	}
 }

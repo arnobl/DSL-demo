@@ -7,6 +7,7 @@ import com.google.inject.Inject
 import fr.insa.exp.exp.ExpArithm
 import fr.insa.exp.exp.ExpPackage
 import fr.insa.exp.validation.ExpValidator
+import org.eclipse.xtext.diagnostics.Diagnostic
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.util.ParseHelper
@@ -14,7 +15,6 @@ import org.eclipse.xtext.testing.validation.ValidationTestHelper
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
-import org.eclipse.emf.common.util.Diagnostic
 
 @ExtendWith(InjectionExtension)
 @InjectWith(ExpInjectorProvider)
@@ -74,7 +74,7 @@ class ExpParsingTest {
 	@Test
 	def void testDiv() {
 		result = parseHelper.parse('''
-			/ 12 0
+			/ 0 12
 		''')
 		Assertions.assertNotNull(result)
 		result.assertNoIssues
@@ -91,9 +91,18 @@ class ExpParsingTest {
 	}
 	
 	@Test
-	def void testZero() {
+	def void testDivZero() {
 		result = parseHelper.parse('''
-			/ 0 12
+			/ 12 0
+		''')
+	    result.assertError(ExpPackage.Literals.DIV, ExpValidator.DIV_0)
+	}
+	
+	@Test
+	def void testDivZeroWithVal() {
+		result = parseHelper.parse('''
+			val a := 0
+			/ 12 a
 		''')
 	    result.assertError(ExpPackage.Literals.DIV, ExpValidator.DIV_0)
 	}
@@ -125,6 +134,17 @@ class ExpParsingTest {
 		+ foo bar
 		''')
 		
-		result.assertError(ExpPackage.Literals.VAL_REF, org.eclipse.xtext.diagnostics.Diagnostic.LINKING_DIAGNOSTIC)
+		result.assertError(ExpPackage.Literals.VAL_REF, Diagnostic.LINKING_DIAGNOSTIC)
+	}
+	
+	@Test
+	def void testValDuplicated() {
+		result = parseHelper.parse('''
+		val bar := 1
+		val bar := 2
+		+ 1 bar
+		''')
+		
+		result.assertError(ExpPackage.Literals.VAL, ExpValidator.VAL_DUP)
 	}
 }
