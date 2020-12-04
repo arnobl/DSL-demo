@@ -38,7 +38,7 @@ public class ExpValidator extends AbstractExpValidator {
 	
 	@Check
 	public void checkNoDuplicateVal(Val val) {
-		if(((ExpArithm) val.eContainer()).getVars()
+		if(((ExpArithm) val.eContainer()).getVals()
 			.stream()
 			.anyMatch(v -> v.getName().equals(val.getName()) && v != val)) {
 			error(VAL_DUP_MSG, ExpPackage.Literals.VAL__NAME, VAL_DUP);

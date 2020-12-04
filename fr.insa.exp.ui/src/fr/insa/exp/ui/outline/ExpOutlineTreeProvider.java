@@ -5,11 +5,41 @@ package fr.insa.exp.ui.outline;
 
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider;
 
+import fr.insa.exp.exp.Add;
+import fr.insa.exp.exp.Div;
+import fr.insa.exp.exp.Literal;
+import fr.insa.exp.exp.Mult;
+import fr.insa.exp.exp.Sub;
+import fr.insa.exp.exp.Val;
+
 /**
  * Customization of the default outline structure.
  *
- * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#outline
+ * See
+ * https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#outline
  */
 public class ExpOutlineTreeProvider extends DefaultOutlineTreeProvider {
-
+	public Object _text(Div div) {
+		return "/";
+	}
+	
+	public Object _text(Mult mult) {
+		return "*";
+	}
+	
+	public Object _text(Add add) {
+		return "+";
+	}
+	
+	public Object _text(Sub sub) {
+		return "-";
+	}
+	
+	public Object _text(Literal lit) {
+		return String.valueOf(lit.getValue());
+	}
+	
+	public Object _text(Val val) {
+		return "val := " + String.valueOf(val.getValue());
+	}
 }

@@ -3,7 +3,7 @@ grammar fr.insa.exp.Exp with org.eclipse.xtext.common.Terminals
 generate exp "http://www.insa.fr/exp/Exp"
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
-ExpArithm: (vars+=Val)* expression=EltExp;
+ExpArithm: (vals+=Val)* expression=EltExp;
 EltExp: Literal | Add | Sub | Mult | Div | ValRef;
 Literal: value=DOUBLE;
 Add: '+' Operands;
