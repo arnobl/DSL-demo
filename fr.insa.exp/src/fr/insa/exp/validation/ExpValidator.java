@@ -3,6 +3,7 @@
  */
 package fr.insa.exp.validation;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
 
 import fr.insa.exp.exp.Div;
@@ -25,6 +26,9 @@ public class ExpValidator extends AbstractExpValidator {
 	public static final String VAL_DUP = "val-dup";
 	public static final String VAL_DUP_MSG = "Already defined";
 	
+	public static final String NOT_USED = "val-dupnot-used";
+	public static final String NOT_USED_MSG = "The value is never used";
+	
 	@Check
 	public void checkDiv0(Div division) {
 		if (division.getRightOp() instanceof Literal && Double.compare(0d, ((Literal) division.getRightOp()).getValue()) == 0) {
@@ -33,6 +37,26 @@ public class ExpValidator extends AbstractExpValidator {
 		
 		if (division.getRightOp() instanceof ValRef && Double.compare(0d, ((ValRef) division.getRightOp()).getRef().getValue()) == 0) {
 			error(DIV_0_MSG, ExpPackage.Literals.OPERANDS__RIGHT_OP, DIV_0);
+		}
+	}
+	
+	@Check
+	public void checkNoUnsedVal(Val val) {
+		// Getting the parent of the val which is an ExpArithm
+		// Searching in the ExpArithm for usages of the val
+		final var content = ((ExpArithm) val.eContainer()).getExpression().eAllContents();
+		EObject next;
+		boolean searchAgain = true;
+		
+		while(content.hasNext() && searchAgain) {
+			next = content.next();
+			if(next instanceof ValRef && ((ValRef) next).getRef().getName().equals(val.getName())) {
+				searchAgain = false;
+			}
+		}
+			
+		if(searchAgain) {
+			warning(NOT_USED_MSG, ExpPackage.Literals.VAL__NAME, NOT_USED);			
 		}
 	}
 	
