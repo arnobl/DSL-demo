@@ -31,10 +31,12 @@ public class ExpValidator extends AbstractExpValidator {
 	
 	@Check
 	public void checkDiv0(Div division) {
+		// Checking the right literal is not 0
 		if (division.getRightOp() instanceof Literal && Double.compare(0d, ((Literal) division.getRightOp()).getValue()) == 0) {
 			error(DIV_0_MSG, ExpPackage.Literals.OPERANDS__RIGHT_OP, DIV_0);
 		}
-		
+
+		// Checking the right val reference is not 0
 		if (division.getRightOp() instanceof ValRef && Double.compare(0d, ((ValRef) division.getRightOp()).getRef().getValue()) == 0) {
 			error(DIV_0_MSG, ExpPackage.Literals.OPERANDS__RIGHT_OP, DIV_0);
 		}
