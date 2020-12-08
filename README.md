@@ -26,4 +26,8 @@ The unit tests that test the grammar:
 The customised outline:
 `fr.insa.exp.ui/src/fr/insa/exp/ui/outline/ExpOutlineTreeProvider.java`
 
+The quick-fix features:
+`fr.insa.exp.ui/src/fr/insa/exp/ui/quickfix/ExpQuickfixProvider.java`
 
+The content assist features:
+`fr.insa.exp.ui/src/fr/insa/exp/ui/contentassist/ExpProposalProvider.java`

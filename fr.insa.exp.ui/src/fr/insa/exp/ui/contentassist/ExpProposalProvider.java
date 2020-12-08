@@ -3,10 +3,40 @@
  */
 package fr.insa.exp.ui.contentassist;
 
+import java.util.stream.IntStream;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.Assignment;
+import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
+import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 
 /**
  * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#content-assist
  * on how to customize the content assistant.
  */
 public class ExpProposalProvider extends AbstractExpProposalProvider {
+	@Override
+	public void completeLiteral_Value(EObject model, Assignment assignment, ContentAssistContext context,
+			ICompletionProposalAcceptor acceptor) {
+		super.completeLiteral_Value(model, assignment, context, acceptor);
+		
+		produceIntProposals(context, acceptor);
+	}
+
+	@Override
+	public void completeVal_Value(EObject model, Assignment assignment, ContentAssistContext context,
+			ICompletionProposalAcceptor acceptor) {
+		super.completeVal_Value(model, assignment, context, acceptor);
+		
+		produceIntProposals(context, acceptor);
+	}
+	
+	private void produceIntProposals(ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		// Quite useless but illustrative example of proposals:
+		//each int value is converted as a string value to be one proposal for val and literal values
+		IntStream
+		.range(0, 10)
+		.mapToObj(i -> String.valueOf(i))
+		.forEach(i -> acceptor.accept(createCompletionProposal(i, context)));
+	}
 }
