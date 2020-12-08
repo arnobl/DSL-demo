@@ -3,7 +3,17 @@
  */
 package fr.insa.exp.ui.quickfix;
 
+import javax.swing.text.BadLocationException;
+
+import org.eclipse.xtext.ui.editor.model.IXtextDocument;
+import org.eclipse.xtext.ui.editor.model.edit.IModification;
+import org.eclipse.xtext.ui.editor.model.edit.IModificationContext;
 import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider;
+import org.eclipse.xtext.ui.editor.quickfix.Fix;
+import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor;
+import org.eclipse.xtext.validation.Issue;
+
+import fr.insa.exp.validation.ExpValidator;
 
 /**
  * Custom quickfixes.
@@ -12,15 +22,18 @@ import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider;
  */
 public class ExpQuickfixProvider extends DefaultQuickfixProvider {
 
-//	@Fix(ExpValidator.INVALID_NAME)
-//	public void capitalizeName(final Issue issue, IssueResolutionAcceptor acceptor) {
-//		acceptor.accept(issue, "Capitalize name", "Capitalize the name.", "upcase.png", new IModification() {
-//			public void apply(IModificationContext context) throws BadLocationException {
-//				IXtextDocument xtextDocument = context.getXtextDocument();
-//				String firstLetter = xtextDocument.get(issue.getOffset(), 1);
-//				xtextDocument.replace(issue.getOffset(), 1, firstLetter.toUpperCase());
-//			}
-//		});
-//	}
-
+	@Fix(ExpValidator.NOT_USED)
+	public void removeUnusedVal(final Issue issue, IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, "Remove val", "Remove the unused val.", "upcase.png", new IModification() {
+			public void apply(IModificationContext context) throws BadLocationException, org.eclipse.jface.text.BadLocationException {
+				IXtextDocument xtextDocument = context.getXtextDocument();
+				
+				// This may be useful for you if yo uwant to delete the line or get information about the current line
+//				IRegion line = xtextDocument.getLineInformation(issue.getLineNumber() - 1);
+				
+				// Remove all the text concerned by the warning
+				xtextDocument.replace(issue.getOffset(), issue.getLength() + 1, "");
+			}
+		});
+	}
 }

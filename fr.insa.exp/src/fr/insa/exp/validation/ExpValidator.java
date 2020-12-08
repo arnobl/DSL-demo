@@ -46,7 +46,8 @@ public class ExpValidator extends AbstractExpValidator {
 	public void checkNoUnsedVal(Val val) {
 		// Getting the parent of the val which is an ExpArithm
 		// Searching in the ExpArithm for usages of the val
-		final var content = ((ExpArithm) val.eContainer()).getExpression().eAllContents();
+		final var exp = ((ExpArithm) val.eContainer());
+		final var content = exp.getExpression().eAllContents();
 		EObject next;
 		boolean searchAgain = true;
 		
@@ -58,7 +59,12 @@ public class ExpValidator extends AbstractExpValidator {
 		}
 			
 		if(searchAgain) {
-			warning(NOT_USED_MSG, ExpPackage.Literals.VAL__NAME, NOT_USED);			
+			// I want to put the warning on all the 'val' not only on its name.
+			// Main reason: the quick fix will removed all the text affected by the warning
+			// To do so, I say that this concerns 'exp',
+			// it concerns the vals attribute of the ExpArithm 'exp',
+			// it concerns the val object of 'vals' located at the given index.
+			warning(NOT_USED_MSG, exp, ExpPackage.Literals.EXP_ARITHM__VALS, exp.getVals().indexOf(val), NOT_USED);			
 		}
 	}
 	
