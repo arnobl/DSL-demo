@@ -7,6 +7,7 @@ import com.google.inject.Inject
 import fr.insa.exp.exp.ExpArithm
 import fr.insa.exp.exp.ExpPackage
 import fr.insa.exp.validation.ExpValidator
+import java.util.stream.Stream
 import org.eclipse.xtext.diagnostics.Diagnostic
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
@@ -15,6 +16,8 @@ import org.eclipse.xtext.testing.validation.ValidationTestHelper
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
 @ExtendWith(InjectionExtension)
 @InjectWith(ExpInjectorProvider)
@@ -24,68 +27,25 @@ class ExpParsingTest {
 	@Inject 
 	extension ValidationTestHelper
 	ExpArithm result;
-			
-	@Test
-	def void testAdditionInt() {
-		result = parseHelper.parse('''
-			+ 1 1
-		''')
-		Assertions.assertNotNull(result)
-		result.assertNoIssues
+	
+	def static Stream<String> goodLanguageSequences() {
+		return Stream.of(
+		"+ 1 1", 
+		"+ 1.12 1", 
+		"* 2 9", 
+		"* 2 9.62",
+		"- 8.65 9.62",
+		"/ 0 12",
+		"/ 4 + 1 - * 8 9 + 5 5",
+		'''val foo := 1
+		+ foo foo'''
+		);
 	}
 	
-	@Test
-	def void testAdditionDouble() {
-		result = parseHelper.parse('''
-			+ 1.12 1
-		''')
-		Assertions.assertNotNull(result)
-		result.assertNoIssues
-	}
-	
-	@Test
-	def void testMultInt() {
-		result = parseHelper.parse('''
-			* 2 9
-		''')
-		Assertions.assertNotNull(result)
-		result.assertNoIssues
-	}
-	
-	@Test
-	def void testMultDouble() {
-		result = parseHelper.parse('''
-			* 2 9.62
-		''')
-		Assertions.assertNotNull(result)
-		result.assertNoIssues
-	}
-	
-		
-	@Test
-	def void testSub() {
-		result = parseHelper.parse('''
-			- 8.65 9.62
-		''')
-		Assertions.assertNotNull(result)
-		result.assertNoIssues
-	}
-	
-	@Test
-	def void testDiv() {
-		result = parseHelper.parse('''
-			/ 0 12
-		''')
-		Assertions.assertNotNull(result)
-		result.assertNoIssues
-	}
-	
-		
-	@Test
-	def void testAllOps() {
-		result = parseHelper.parse('''
-		/ 4 + 1 - * 8 9 + 5 5
-		''')
+	@ParameterizedTest
+	@MethodSource("goodLanguageSequences")
+	def void testSequences(String seq) {
+		result = parseHelper.parse(seq)
 		Assertions.assertNotNull(result)
 		result.assertNoIssues
 	}
@@ -108,23 +68,14 @@ class ExpParsingTest {
 	}
 	
 	@Test
-	def void testVal() {
+	def void testValNotUsed() {
 		result = parseHelper.parse('''
 		val foo := 1
 		+ 1 2
 		''')
 		Assertions.assertNotNull(result)
-		result.assertNoIssues
-	}
-	
-	@Test
-	def void testValRef() {
-		result = parseHelper.parse('''
-		val foo := 1
-		+ foo foo
-		''')
-		Assertions.assertNotNull(result)
-		result.assertNoIssues
+		result.assertNoErrors
+		result.assertWarning(ExpPackage.Literals.VAL, ExpValidator.NOT_USED)
 	}
 	
 	@Test
