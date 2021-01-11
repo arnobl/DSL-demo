@@ -31,3 +31,8 @@ The quick-fix features:
 
 The content assist features:
 `fr.insa.exp.ui/src/fr/insa/exp/ui/contentassist/ExpProposalProvider.java`
+
+Setting the keywords colour:
+`fr.insa.exp.ui/src/fr/insa/exp/ui/ExpUiModule.java`
+
+`fr.insa.exp.ui/src/fr/insa/exp/ui/coloring/ExpHighlightingConfiguration.java` (to create)

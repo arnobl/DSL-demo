@@ -4,6 +4,9 @@
 package fr.insa.exp.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
+
+import fr.insa.exp.ui.coloring.ExpHighlightingConfiguration;
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
@@ -12,5 +15,9 @@ public class ExpUiModule extends AbstractExpUiModule {
 
 	public ExpUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
+	}
+	
+	public Class<? extends IHighlightingConfiguration> bindILexicalHighlightingConfiguration() {
+		return ExpHighlightingConfiguration.class;
 	}
 }
