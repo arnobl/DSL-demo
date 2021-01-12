@@ -53,7 +53,7 @@ public class ExpValidator extends AbstractExpValidator {
 		
 		while(content.hasNext() && searchAgain) {
 			next = content.next();
-			if(next instanceof ValRef && ((ValRef) next).getRef().getName().equals(val.getName())) {
+			if(next instanceof ValRef && ((ValRef) next).getRef().getNameVal().equals(val.getNameVal())) {
 				searchAgain = false;
 			}
 		}
@@ -72,8 +72,8 @@ public class ExpValidator extends AbstractExpValidator {
 	public void checkNoDuplicateVal(Val val) {
 		if(((ExpArithm) val.eContainer()).getVals()
 			.stream()
-			.anyMatch(v -> v.getName().equals(val.getName()) && v != val)) {
-			error(VAL_DUP_MSG, ExpPackage.Literals.VAL__NAME, VAL_DUP);
+			.anyMatch(v -> v.getNameVal().equals(val.getNameVal()) && v != val)) {
+			error(VAL_DUP_MSG, ExpPackage.Literals.VAL__NAME_VAL, VAL_DUP);
 		}
 	}
 }

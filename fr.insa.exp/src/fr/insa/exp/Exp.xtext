@@ -10,7 +10,8 @@ Add: '+' Operands;
 Sub: '-' Operands;
 Mult: '*' Operands;
 Div: '/' Operands;
-Val: 'val' name=ID ':=' value=DOUBLE;
+// Should use 'name' instead of 'nameVal'. Just for illustrating the manual scoping feature
+Val: 'val' nameVal=ID ':=' value=DOUBLE;
 ValRef: ref=[Val];
 
 fragment Operands: leftOp=EltExp rightOp=EltExp;
