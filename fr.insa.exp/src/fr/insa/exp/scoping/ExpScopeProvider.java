@@ -25,6 +25,7 @@ import fr.insa.exp.exp.ValRef;
 public class ExpScopeProvider extends AbstractExpScopeProvider {
     @Override
     public IScope getScope(EObject context, EReference reference) {
+    	// We focus on resolving the ref attribute (so ExpPackage.Literals.VAL_REF__REF) of the ValRef class
         if (context instanceof ValRef && reference == ExpPackage.Literals.VAL_REF__REF) {
         	// Getting the root of the model
             EObject rootElement = EcoreUtil2.getRootContainer(context);
