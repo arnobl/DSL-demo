@@ -57,3 +57,23 @@ Semantic highlighting:
 Manual cross-reference (scoping):
 
 `fr.insa.exp/src/fr/insa/exp/scoping/ExpScopeProvider.java`
+
+
+
+# Tips and tricks
+
+How to access the root object of my model?
+
+```java
+EObject rootElement = EcoreUtil2.getRootContainer(myModelElement);
+```
+
+
+How to get all the instances of a given type contained in my model?
+
+```java
+// Getting the root of the model
+EObject rootElement = EcoreUtil2.getRootContainer(myModelElement);
+// Getting all the instances of MyModelObjectType in the model
+List<MyModelObjectType> objects = EcoreUtil2.getAllContentsOfType(rootElement, MyModelObjectType.class);
+```
