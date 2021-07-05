@@ -42,6 +42,12 @@ Workflow {
 				// Generates checks for @Deprecated grammar annotations, an IssueProvider and a corresponding PropertyPage
 				generateDeprecationValidation = true
 			}
+			parserGenerator = {
+//				debugGrammar = true
+//  				options = {
+//    				backtrack = true
+//  				}
+			}
 			generator = {
 				generateXtendStub = true
 			}
