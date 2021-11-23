@@ -82,7 +82,7 @@ List<MyModelObjectType> objects = EcoreUtil2.getAllContentsOfType(rootElement, M
 
 `MyRule: 'mytoken';`
 
-In this example Xtext optimises the grammar: since `MyRule` contains tokens only (ie not rule access), it considers `MyRule` as a terminal (ie a lexer rule) and does not create a class `MyRule`.
+In this example Xtext optimises the grammar: since `MyRule` contains tokens only (ie no rule access), it considers `MyRule` as a terminal (ie a lexer rule) and does not create a class `MyRule`.
 
 To force the class creation, you have to write that:
 
