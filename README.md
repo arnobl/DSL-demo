@@ -88,7 +88,7 @@ To force the class creation, you have to write that:
 
 `MyRule returns MyRule: 'mytoken';`
 
-where `returns` precise the name of the class to instantiate (this class does not exist yet, it is Xtext that generate it in the `src-gen` folder).
+where `returns` precises the name of the class to instantiate (this class does not exist yet, it is Xtext that generates it in the `src-gen` folder).
 
 
 
