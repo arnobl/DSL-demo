@@ -86,9 +86,9 @@ In this example Xtext optimises the grammar: since `MyRule` contains tokens only
 
 To force the class creation, you have to write that:
 
-`MyRule returns MyRule: 'mytoken';`
+`MyRule: {MyRule} 'mytoken';`
 
-where `returns` precises the name of the class to instantiate (this class does not exist yet, it is Xtext that generates it in the `src-gen` folder).
+This precises the name of the class to instantiate (this class does not exist yet, it is Xtext that generates it in the `src-gen` folder).
 
 
 
